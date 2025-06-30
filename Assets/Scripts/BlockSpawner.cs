@@ -24,6 +24,10 @@ public class BlockSpawner : MonoBehaviour
     public float blockMass = 1f;
     public PhysicsMaterial2D blockPhysicsMaterial;
 
+    [Header("Lava Follow")]
+    public Transform lava; // Assign in Inspector
+    public float spawnHeightOffset = 10f; // How far above lava to spawn
+
     private float nextSpawnTime;
     private Camera mainCamera;
 
@@ -41,11 +45,25 @@ public class BlockSpawner : MonoBehaviour
 
     void Update()
     {
-        // Check if it's time to spawn a new block
+        // Move the spawner to follow the lava
+        if (lava != null)
+        {
+            transform.position = new Vector3(transform.position.x, lava.position.y + spawnHeightOffset, transform.position.z);
+        }
+
+        // Check if it's time to spawn new blocks
         if (Time.time >= nextSpawnTime && blockPrefab != null)
         {
-            SpawnBlock();
+            SpawnBlocks(2); // Spawn two blocks per drop
             nextSpawnTime = Time.time + spawnInterval;
+        }
+    }
+
+    void SpawnBlocks(int count)
+    {
+        for (int i = 0; i < count; i++)
+        {
+            SpawnBlock();
         }
     }
 
@@ -61,6 +79,7 @@ public class BlockSpawner : MonoBehaviour
 
         // Instantiate the block
         GameObject newBlock = Instantiate(blockPrefab, spawnPosition, Quaternion.identity);
+        newBlock.layer = LayerMask.NameToLayer("Ground");
 
         // Assign random sprite
         if (blockSprites != null && blockSprites.Length > 0)
