@@ -25,7 +25,7 @@ public class BlockSpawner : MonoBehaviour
     public PhysicsMaterial2D blockPhysicsMaterial;
 
     [Header("Lava Follow")]
-    public Transform lava; // Assign in Inspector
+    public Transform player; // Assign in Inspector
     public float spawnHeightOffset = 10f; // How far above lava to spawn
 
     private float nextSpawnTime;
@@ -46,9 +46,9 @@ public class BlockSpawner : MonoBehaviour
     void Update()
     {
         // Move the spawner to follow the lava
-        if (lava != null)
+        if (player != null)
         {
-            transform.position = new Vector3(transform.position.x, lava.position.y + spawnHeightOffset, transform.position.z);
+            transform.position = new Vector3(transform.position.x, player.position.y + spawnHeightOffset, transform.position.z);
         }
 
         // Check if it's time to spawn new blocks
