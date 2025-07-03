@@ -62,7 +62,7 @@ public class LavaRiser : MonoBehaviour
 
             // Game Over logic
             gameOver = true;
-            // Optionally: Disable player controls, show Game Over UI, etc.
+            GameOverManager.Instance.GameOver(); // Assuming you have a GameOverManager instance
             Debug.Log("Game Over! Lava touched the player.");
             // Example: Destroy(other.gameObject);
             // Or: Call your GameManager.GameOver() method here
