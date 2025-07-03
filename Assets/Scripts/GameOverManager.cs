@@ -1,3 +1,4 @@
+using TMPro;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.SceneManagement;
@@ -5,11 +6,13 @@ using UnityEngine.SceneManagement;
 public class GameOverManager : MonoBehaviour
 {
     public static GameOverManager Instance { get; set; }
-    public GameObject gameOverUI;  // Reference to the Game Over UI Canvas
+    public GameObject gameOverUI;
+    public TextMeshProUGUI finalScoreText;
 
     void Awake()
     {
-        // Set up singleton instance
+        gameOverUI.SetActive(false);
+        
         if (Instance == null)
         {
             Instance = this;
@@ -19,16 +22,16 @@ public class GameOverManager : MonoBehaviour
             Destroy(gameObject);
             return;
         }
-
-        // Ensure the Game Over UI is hidden at start
-        gameOverUI.SetActive(false);
     }
 
     // Method to trigger the Game Over event
     public void GameOver()
     {
+        Debug.Log("Game Over triggered!");
         // Activate the Game Over UI
         gameOverUI.SetActive(true);
+
+        finalScoreText.text = "Time Survived: " + ScoreManager.Instance.GetScore() + " sec";
 
         // Pause the game by setting Time.timeScale to 0
         Time.timeScale = 0f;  // Freeze the game

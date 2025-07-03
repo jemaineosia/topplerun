@@ -34,10 +34,6 @@ public class LavaRiser : MonoBehaviour
         {
             // Gradually increase the lava's speed
             riseSpeed += lavaAcceleration * Time.deltaTime;
-            // Move up
-            //transform.position += Vector3.up * riseSpeed * Time.deltaTime;
-
-            // Grow taller
             transform.localScale += new Vector3(0, scaleSpeed * Time.deltaTime, 0);
         }
 
@@ -62,7 +58,8 @@ public class LavaRiser : MonoBehaviour
 
             // Game Over logic
             gameOver = true;
-            GameOverManager.Instance.GameOver(); // Assuming you have a GameOverManager instance
+            ScoreManager.Instance.StopScoring();
+            GameOverManager.Instance.GameOver();
             Debug.Log("Game Over! Lava touched the player.");
             // Example: Destroy(other.gameObject);
             // Or: Call your GameManager.GameOver() method here
