@@ -14,6 +14,9 @@ public class CloudSpawner : MonoBehaviour
     public float minScale = 0.5f;          // Min cloud scale
     public float maxScale = 1.5f;          // Max cloud scale
     public float spawnPadding = 2f;        // Offscreen spawn padding
+    [Header("Visual Settings")]
+    public float parallaxFactor = 1f;      // Cloud movement speed multiplier
+    public Color cloudColor = Color.white;  // Cloud tint color
 
     [Header("Area")]
     public Camera mainCamera;
@@ -48,6 +51,7 @@ public class CloudSpawner : MonoBehaviour
         GameObject cloud = Instantiate(cloudPrefab, new Vector3(x, y, 0), Quaternion.identity, transform);
         SpriteRenderer sr = cloud.GetComponent<SpriteRenderer>();
         sr.sprite = sprite;
+        sr.sortingOrder = -10;
 
         // Random scale
         float scale = Random.Range(minScale, maxScale);
@@ -55,38 +59,6 @@ public class CloudSpawner : MonoBehaviour
 
         // Assign random speed and direction
         float speed = Random.Range(minSpeed, maxSpeed) * (fromLeft ? 1 : -1);
-        cloud.AddComponent<CloudMover>().Init(speed, minX, maxX, y, spawnPadding);
-    }
-}
-
-// Attach this script to your clouds spawned by CloudSpawner
-public class CloudMover : MonoBehaviour
-{
-    float speed, minX, maxX, y, padding;
-
-    public void Init(float speed, float minX, float maxX, float y, float padding)
-    {
-        this.speed = speed;
-        this.minX = minX;
-        this.maxX = maxX;
-        this.y = y;
-        this.padding = padding;
-    }
-
-    void Update()
-    {
-        transform.position += Vector3.right * speed * Time.deltaTime;
-
-        // If out of bounds, respawn on the other side with new random Y and speed
-        if ((speed > 0 && transform.position.x > maxX) || (speed < 0 && transform.position.x < minX))
-        {
-            bool fromLeft = speed < 0;
-            float newX = fromLeft ? maxX : minX;
-            float newY = Random.Range(y - 1f, y + 1f); // Small vertical variation
-            transform.position = new Vector3(newX, Mathf.Clamp(newY, y - 2f, y + 2f), 0);
-
-            // Optionally randomize speed and scale again
-            speed = Mathf.Abs(speed) * (fromLeft ? -1 : 1);
-        }
+        cloud.AddComponent<CloudMover>().Init(speed, minX, maxX, y, spawnPadding, parallaxFactor, cloudColor);
     }
 }
