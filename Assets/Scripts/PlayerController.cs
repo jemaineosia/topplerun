@@ -19,11 +19,16 @@ public class PlayerController : MonoBehaviour
     private bool isGrounded;
     private bool isHurt;
 
+    [Header("Sound Settings")]
+    public AudioClip jumpClip; // assign in Inspector
+    private AudioSource audioSource;
+
     void Start()
     {
         rb = GetComponent<Rigidbody2D>();
         animator = GetComponent<Animator>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        audioSource = GetComponent<AudioSource>();
     }
 
     void Update()
@@ -57,6 +62,11 @@ public class PlayerController : MonoBehaviour
         if (Input.GetButtonDown("Jump") && isGrounded)
         {
             rb.linearVelocity = new Vector2(rb.linearVelocity.x, jumpForce);
+
+            if (jumpClip != null && audioSource != null)
+            {
+                audioSource.PlayOneShot(jumpClip);
+            }
         }
     }
 

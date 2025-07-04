@@ -9,6 +9,11 @@ public class GameOverManager : MonoBehaviour
     public GameObject gameOverUI;
     public TextMeshProUGUI finalScoreText;
 
+    [Header("Audio Settings")]
+    public AudioSource bgMusicSource;
+    public AudioSource sfxSource;   // Assign the background music AudioSource in Inspector
+    public AudioClip gameOverClip;
+
     void Awake()
     {
         gameOverUI.SetActive(false);
@@ -27,6 +32,13 @@ public class GameOverManager : MonoBehaviour
     // Method to trigger the Game Over event
     public void GameOver()
     {
+        if (bgMusicSource != null)
+            bgMusicSource.Stop();
+
+        // Play game over sound
+        if (sfxSource != null && gameOverClip != null)
+            sfxSource.PlayOneShot(gameOverClip);
+
         Debug.Log("Game Over triggered!");
         // Activate the Game Over UI
         gameOverUI.SetActive(true);
